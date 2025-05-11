@@ -32,11 +32,6 @@ public class Post implements Content{
 
     @Override
     public React addReact(String userID, React react) {
-        if(reacts.containsKey(userID)) {
-            reacts.remove(userID);
-            reacts.put(userID, react);
-            return react;
-        }
         reacts.put(userID, react);
         return react;
     }
@@ -50,10 +45,11 @@ public class Post implements Content{
     public void display() {
         System.out.println("Post id: " + this.id + " content: " + this.content);
         System.out.println("The reactions to this post are");
-        for (React react : reacts.values())
-            System.out.println(react.getUser().getName() + " reacted " + react.getReaction());
+        reacts.values().parallelStream()
+                .forEach(r -> System.out.println(r.getUser().getName() + " reacted " + r.getReaction()));
         System.out.println("The comments on this post are");
-        for (Comment comment : comments.values()) comment.display();
+        comments.values()
+                .forEach(Comment::display);
     }
 
     public void setContent(String content) {
@@ -71,6 +67,13 @@ public class Post implements Content{
     public String getId() {
         return id;
     }
+    public Reply addReplyToComment(String commentID, Reply reply){
+        if(comments.containsKey(commentID)) return comments.get(commentID).addReply(reply.getId(), reply);
+        return null;
+    }
 
+    public void deleteReplyFromComment(User user, String commentID, Reply reply){
+        if(comments.containsKey(commentID)) comments.get(commentID).removeReply(user.getId(), reply.getId());
+    }
 
 }

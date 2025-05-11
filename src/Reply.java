@@ -19,14 +19,9 @@ public class Reply implements Content{
 
     @Override
     public React addReact(String userID, React react) {
-       if(reacts.containsKey(userID)) {
-           reacts.remove(userID);
-           reacts.put(userID, react);
-           System.out.println(userID + " reacted " + react.getReaction() + " to this reply");
-           return react;
-       }
         reacts.put(userID, react);
-       return react;
+        System.out.println(userID + " reacted " + react.getReaction() + " to this reply");
+        return react;
     }
 
     @Override
@@ -37,22 +32,26 @@ public class Reply implements Content{
 
     @Override
     public void display() {
-        System.out.println("Reply id: " + this.id + " content: " + this.content);
+        System.out.println("Reply id: " + this.id + " content: " + this.content + " by " + this.getUser().getName());
         System.out.println("The reactions to this reply are");
-        for (React react : reacts.values())
-            System.out.println(react.getUser().getName() + " reacted " + react.getReaction());
+        reacts.values().parallelStream().
+        forEach(r -> System.out.println(r.getUser().getName() + " reacted " + r.getReaction()));
     }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void updateContent(String content) {
         System.out.println("Content of reply updated");
         this.content = content;
     }
 
     public User getUser() {
         return user;
+    }
+
+    public String getId() {
+        return id;
     }
 }

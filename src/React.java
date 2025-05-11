@@ -1,12 +1,10 @@
 package src;
 
 public class React {
-    private final String id;
     private final User user;
     private Reaction reaction;
 
-    public React(String id, User user, Reaction reaction) {
-        this.id = id;
+    public React(User user, Reaction reaction) {
         this.user = user;
         this.reaction = reaction;
     }
@@ -17,10 +15,6 @@ public class React {
 
     public void setReaction(Reaction reaction) {
         this.reaction = reaction;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public User getUser() {

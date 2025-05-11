@@ -11,14 +11,12 @@ public class User {
     private final String phoneNumber;
     private final Map<String, User> friends;
     private final Map<String, User> requests;
-    private final Map<String,Post> posts;
 
     public User (String id, String name, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.friends = new HashMap<>();
-        this.posts = new HashMap<>();
         this.requests = new HashMap<>();
     }
 
@@ -74,66 +72,10 @@ public class User {
     public void unfriend(User friend) {
         removeFriend(friend);
         friend.removeFriend(this);
-       // friends.remove(friend.getId());
-       // friend.unfriend(this);
         System.out.println(this.name + " and " + friend.getName() + " are not friends now");
     }
 
     private void removeFriend(User friend) {
         friends.remove(friend.getId());
-    }
-
-    public Post createPost (String content) {
-        String id = "P" + UUID.randomUUID().toString().substring(0,8);
-        Post post = new Post(id, this, content);
-        posts.put(id, post);
-        System.out.println(this.name + " created a post");
-        return post;
-    }
-
-    public void deletePost (Post post) {
-        posts.remove(post.getId());
-        System.out.println(this.name + " deleted a post");
-    }
-
-    public Comment addComment (Post post, String content) {
-        String id = "C" + UUID.randomUUID().toString().substring(0,8);
-        Comment comment = new Comment(id, this, content);
-        System.out.println(this.name + " commented on post of " + post.getUser().getName());
-        return post.addComment(id, comment);
-    }
-
-    public void deleteComment (Post post, Comment comment) {
-        post.removeComment(this.getId(), comment.getId());
-        System.out.println(this.name + " removed comment form the post of " + post.getUser().getName());
-    }
-
-    public Reply addReply (Comment comment, String content) {
-        String id = "R" + UUID.randomUUID().toString().substring(0,8);
-        Reply reply = new Reply(id, this, content);
-        System.out.println(this.name + " replied on comment of " + comment.getUser().getName());
-        return comment.addReply(id, reply);
-    }
-
-    public void deleteReply (Comment comment, Reply reply) {
-        comment.removeReply(this.getId(), comment.getId());
-        System.out.println(this.name + " removed reply form the comment of " + comment.getUser().getName());
-    }
-
-    public React addReact (Content content, Reaction reaction) {
-        String id = "react" + UUID.randomUUID().toString().substring(0,8);
-        React react = new React(id, this, reaction);
-        System.out.println(this.name + " reacted " + reaction );
-        return content.addReact(this.getId(), react);
-    }
-
-    public void removeReact (Content content) {
-        content.removeReact(this.id);
-        System.out.println(this.name + " removed reaction " );
-    }
-
-    public void displayPosts() {
-        System.out.println("Displaying posts of " + this.getName());
-        for(Post post : posts.values()) post.display();
     }
 }
